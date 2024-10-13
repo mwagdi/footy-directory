@@ -1,0 +1,34 @@
+type Nation {
+    id: ID!
+    name: String!
+    population: Int!
+    clubs: [Club]!
+    flag: String
+    players: [Player]!
+}
+
+type Club {
+    id: ID!
+    name: String!
+    nation: Nation!
+    nation_id: Int!
+    players: [Player]!
+    logo: String
+}
+
+type Player {
+    id: ID!
+    name: String!
+    birthdate: String!
+    position: [String]!
+    club: Club!
+    club_id: Int!
+    nationalities: [Nation]!
+    avatar: String
+}
+
+type Query {
+    nations: [Nation]!
+    clubs: [Club]!
+    players: [Player]!
+}
