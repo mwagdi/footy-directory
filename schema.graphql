@@ -20,15 +20,70 @@ type Player {
     id: ID!
     name: String!
     birthdate: String!
-    position: [String]!
+    position: String!
     club: Club!
     club_id: Int!
     nationalities: [Nation]!
     avatar: String
 }
 
+type User {
+    id: ID!
+    email: String!
+    password: String!
+    first_name: String!
+    last_name: String!
+    avatar: String
+}
+
+type AuthPayload {
+    token: String!
+    user: User!
+}
+
 type Query {
     nations: [Nation]!
     clubs: [Club]!
     players: [Player]!
+}
+
+type Mutation {
+    signup(input: SignupInput!): AuthPayload
+    login(input: LoginInput!): AuthPayload
+    createNation(input: CreateNationInput!): Nation
+    createClub(input: CreateClubInput!): Club
+    createPlayer(input: CreatePlayerInput): Player
+}
+
+input SignupInput {
+    email: String!
+    password: String!
+    first_name: String!
+    last_name: String!
+    avatar: String
+}
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+input CreateNationInput {
+    name: String!
+    population: Int!
+    flag: String
+}
+
+input CreateClubInput {
+    name: String!
+    nation_id: Int!
+    logo: String
+}
+
+input CreatePlayerInput {
+    name: String!
+    birthdate: String!
+    position: String!
+    club_id: Int!
+    avatar: String
 }

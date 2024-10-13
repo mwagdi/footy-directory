@@ -1,5 +1,11 @@
 import client from './client';
-import { CLUBS_TABLE_QUERY, NATIONS_TABLE_QUERY, PLAYER_NATIONS_TABLE_QUERY, PLAYERS_TABLE_QUERY } from './sql';
+import {
+  CLUBS_TABLE_QUERY,
+  NATIONS_TABLE_QUERY,
+  PLAYER_NATIONS_TABLE_QUERY,
+  PLAYERS_TABLE_QUERY,
+  USERS_TABLE_QUERY,
+} from './sql';
 
 export const createTables = async () => {
   try {
@@ -17,6 +23,9 @@ export const createTables = async () => {
 
     await client.query(PLAYER_NATIONS_TABLE_QUERY);
     console.log('Player Nations junction table created successfully');
+
+    await client.query(USERS_TABLE_QUERY);
+    console.log('Users table created successfully');
   } catch (error) {
     console.log(error);
   }

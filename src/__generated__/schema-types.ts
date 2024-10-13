@@ -6,6 +6,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -13,6 +14,12 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+};
+
+export type AuthPayload = {
+  __typename?: 'AuthPayload';
+  token: Scalars['String']['output'];
+  user: User;
 };
 
 export type Club = {
@@ -23,6 +30,65 @@ export type Club = {
   nation: Nation;
   nation_id: Scalars['Int']['output'];
   players: Array<Maybe<Player>>;
+};
+
+export type CreateClubInput = {
+  logo?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  nation_id: Scalars['Int']['input'];
+};
+
+export type CreateNationInput = {
+  flag?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  population: Scalars['Int']['input'];
+};
+
+export type CreatePlayerInput = {
+  avatar?: InputMaybe<Scalars['String']['input']>;
+  birthdate: Scalars['String']['input'];
+  club_id: Scalars['Int']['input'];
+  name: Scalars['String']['input'];
+  position: Scalars['String']['input'];
+};
+
+export type LoginInput = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createClub?: Maybe<Club>;
+  createNation?: Maybe<Nation>;
+  createPlayer?: Maybe<Player>;
+  login?: Maybe<AuthPayload>;
+  signup?: Maybe<AuthPayload>;
+};
+
+
+export type MutationCreateClubArgs = {
+  input: CreateClubInput;
+};
+
+
+export type MutationCreateNationArgs = {
+  input: CreateNationInput;
+};
+
+
+export type MutationCreatePlayerArgs = {
+  input?: InputMaybe<CreatePlayerInput>;
+};
+
+
+export type MutationLoginArgs = {
+  input: LoginInput;
+};
+
+
+export type MutationSignupArgs = {
+  input: SignupInput;
 };
 
 export type Nation = {
@@ -44,7 +110,7 @@ export type Player = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   nationalities: Array<Maybe<Nation>>;
-  position: Array<Maybe<Scalars['String']['output']>>;
+  position: Scalars['String']['output'];
 };
 
 export type Query = {
@@ -52,6 +118,24 @@ export type Query = {
   clubs: Array<Maybe<Club>>;
   nations: Array<Maybe<Nation>>;
   players: Array<Maybe<Player>>;
+};
+
+export type SignupInput = {
+  avatar?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  first_name: Scalars['String']['input'];
+  last_name: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type User = {
+  __typename?: 'User';
+  avatar?: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
+  first_name: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  last_name: Scalars['String']['output'];
+  password: Scalars['String']['output'];
 };
 
 
@@ -125,26 +209,48 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AuthPayload: ResolverTypeWrapper<AuthPayload>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Club: ResolverTypeWrapper<Club>;
+  CreateClubInput: CreateClubInput;
+  CreateNationInput: CreateNationInput;
+  CreatePlayerInput: CreatePlayerInput;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  LoginInput: LoginInput;
+  Mutation: ResolverTypeWrapper<{}>;
   Nation: ResolverTypeWrapper<Nation>;
   Player: ResolverTypeWrapper<Player>;
   Query: ResolverTypeWrapper<{}>;
+  SignupInput: SignupInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  User: ResolverTypeWrapper<User>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AuthPayload: AuthPayload;
   Boolean: Scalars['Boolean']['output'];
   Club: Club;
+  CreateClubInput: CreateClubInput;
+  CreateNationInput: CreateNationInput;
+  CreatePlayerInput: CreatePlayerInput;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  LoginInput: LoginInput;
+  Mutation: {};
   Nation: Nation;
   Player: Player;
   Query: {};
+  SignupInput: SignupInput;
   String: Scalars['String']['output'];
+  User: User;
+};
+
+export type AuthPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = {
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ClubResolvers<ContextType = any, ParentType extends ResolversParentTypes['Club'] = ResolversParentTypes['Club']> = {
@@ -155,6 +261,14 @@ export type ClubResolvers<ContextType = any, ParentType extends ResolversParentT
   nation_id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   players?: Resolver<Array<Maybe<ResolversTypes['Player']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createClub?: Resolver<Maybe<ResolversTypes['Club']>, ParentType, ContextType, RequireFields<MutationCreateClubArgs, 'input'>>;
+  createNation?: Resolver<Maybe<ResolversTypes['Nation']>, ParentType, ContextType, RequireFields<MutationCreateNationArgs, 'input'>>;
+  createPlayer?: Resolver<Maybe<ResolversTypes['Player']>, ParentType, ContextType, Partial<MutationCreatePlayerArgs>>;
+  login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
+  signup?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationSignupArgs, 'input'>>;
 };
 
 export type NationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Nation'] = ResolversParentTypes['Nation']> = {
@@ -175,7 +289,7 @@ export type PlayerResolvers<ContextType = any, ParentType extends ResolversParen
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   nationalities?: Resolver<Array<Maybe<ResolversTypes['Nation']>>, ParentType, ContextType>;
-  position?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  position?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -185,10 +299,23 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   players?: Resolver<Array<Maybe<ResolversTypes['Player']>>, ParentType, ContextType>;
 };
 
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  first_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  last_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
+  AuthPayload?: AuthPayloadResolvers<ContextType>;
   Club?: ClubResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Nation?: NationResolvers<ContextType>;
   Player?: PlayerResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 };
 

@@ -79,3 +79,23 @@ export const PLAYER_NATIONS_TABLE_QUERY = `
     ) -- Composite primary key
         )
 `;
+
+export const USERS_TABLE_QUERY = `
+    CREATE TABLE IF NOT EXISTS users
+    (
+        id
+        SERIAL
+        PRIMARY
+        KEY,
+        email
+        VARCHAR
+    (
+        50
+    ) UNIQUE,
+        first_name TEXT,
+        last_name TEXT,
+        avatar TEXT,
+        password
+        TEXT
+        )
+`;
