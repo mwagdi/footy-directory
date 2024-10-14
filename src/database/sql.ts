@@ -47,6 +47,8 @@ export const PLAYERS_TABLE_QUERY = `
         DATE,
         position
         TEXT,
+        avatar
+        TEXT,
         club_id
         INT
         REFERENCES
