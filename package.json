@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npm run dev & nodemon dist/index.js",
+    "start": "node dist/index.js",
+    "start:dev": "npm run dev & nodemon dist/index.js",
     "dev": "tsc --watch",
     "lint": "eslint .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
