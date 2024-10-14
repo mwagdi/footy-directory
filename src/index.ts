@@ -19,6 +19,7 @@ const server = new ApolloServer<Context>({
 });
 
 (async () => {
+  console.log({ PORT: process.env.PORT });
   const { url } = await startStandaloneServer(server, {
     listen: { port: process.env.PORT as unknown as number || 4000 },
     context: async ({ req }) => {
