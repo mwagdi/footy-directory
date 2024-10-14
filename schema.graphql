@@ -21,8 +21,8 @@ type Player {
     name: String!
     birthdate: String!
     position: String!
-    club: Club!
-    club_id: Int!
+    club: Club
+    club_id: Int
     nationalities: [Nation]!
     avatar: String
 }
@@ -84,6 +84,7 @@ input CreatePlayerInput {
     name: String!
     birthdate: String!
     position: String!
-    club_id: Int!
+    club_id: Int
+    nationality_ids: [Int]!
     avatar: String
 }

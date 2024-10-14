@@ -5,6 +5,7 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import { resolvers } from './resolvers';
 import { createTables } from './database/tables';
 import { decodeAuthHeader } from './utils';
+import { Context } from './types';
 
 dotenv.config();
 
@@ -16,10 +17,6 @@ const server = new ApolloServer<Context>({
   typeDefs,
   resolvers,
 });
-
-interface Context {
-  userId?: number;
-}
 
 (async () => {
   const { url } = await startStandaloneServer(server, {
