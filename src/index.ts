@@ -20,19 +20,23 @@ const server = new ApolloServer<Context>({
 });
 
 (async () => {
-  const { url } = await startStandaloneServer(server, {
-    listen: { port: process.env.PORT as unknown as number || 4000 },
-    context: async ({ req }) => {
-      const token =
-        req && req.headers.authorization
-          ? decodeAuthHeader(req.headers.authorization)
-          : null;
+  try {
+    const { url } = await startStandaloneServer(server, {
+      listen: { port: process.env.PORT as unknown as number || 4000 },
+      context: async ({ req }) => {
+        const token =
+          req && req.headers.authorization
+            ? decodeAuthHeader(req.headers.authorization)
+            : null;
 
-      return {
-        userId: token?.userId,
-      };
-    },
-  });
+        return {
+          userId: token?.userId,
+        };
+      },
+    });
 
-  console.log(`🚀  Server ready at: ${url}`);
+    console.log(`🚀  Server ready at: ${url}`);
+  } catch (e) {
+    console.log('SERVER ERROR', e);
+  }
 })();
