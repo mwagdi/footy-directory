@@ -41,10 +41,17 @@ type AuthPayload {
     user: User!
 }
 
+type Search {
+    nations: [Nation]!
+    clubs: [Club]!
+    players: [Player]!
+}
+
 type Query {
     nations: [Nation]!
     clubs: [Club]!
     players: [Player]!
+    search(input: String!): Search!
 }
 
 type Mutation {

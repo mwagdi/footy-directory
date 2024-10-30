@@ -21,3 +21,29 @@ export const players: QueryResolvers['players'] = async () => {
     text: 'SELECT * FROM players',
   });
 };
+
+export const search: QueryResolvers['search'] = async (_, { input }) => {
+  const nations = await queryDatabase({
+    key: 'search-nations-query',
+    text: 'SELECT * FROM nations WHERE name ILIKE $1',
+    values: [`%${input}%`],
+  });
+
+  const clubs = await queryDatabase({
+    key: 'search-clubs-query',
+    text: 'SELECT * FROM clubs WHERE name ILIKE $1',
+    values: [`%${input}%`],
+  });
+
+  const players = await queryDatabase({
+    key: 'search-players-query',
+    text: 'SELECT * FROM players WHERE name ILIKE $1',
+    values: [`%${input}%`],
+  });
+
+  return {
+    nations,
+    clubs,
+    players,
+  };
+};

@@ -119,6 +119,19 @@ export type Query = {
   clubs: Array<Maybe<Club>>;
   nations: Array<Maybe<Nation>>;
   players: Array<Maybe<Player>>;
+  search: Search;
+};
+
+
+export type QuerySearchArgs = {
+  input: Scalars['String']['input'];
+};
+
+export type Search = {
+  __typename?: 'Search';
+  clubs: Array<Maybe<Club>>;
+  nations: Array<Maybe<Nation>>;
+  players: Array<Maybe<Player>>;
 };
 
 export type SignupInput = {
@@ -224,6 +237,7 @@ export type ResolversTypes = ResolversObject<{
   Nation: ResolverTypeWrapper<Nation>;
   Player: ResolverTypeWrapper<Player>;
   Query: ResolverTypeWrapper<{}>;
+  Search: ResolverTypeWrapper<Search>;
   SignupInput: SignupInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
@@ -244,6 +258,7 @@ export type ResolversParentTypes = ResolversObject<{
   Nation: Nation;
   Player: Player;
   Query: {};
+  Search: Search;
   SignupInput: SignupInput;
   String: Scalars['String']['output'];
   User: User;
@@ -299,6 +314,14 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   clubs?: Resolver<Array<Maybe<ResolversTypes['Club']>>, ParentType, ContextType>;
   nations?: Resolver<Array<Maybe<ResolversTypes['Nation']>>, ParentType, ContextType>;
   players?: Resolver<Array<Maybe<ResolversTypes['Player']>>, ParentType, ContextType>;
+  search?: Resolver<ResolversTypes['Search'], ParentType, ContextType, RequireFields<QuerySearchArgs, 'input'>>;
+}>;
+
+export type SearchResolvers<ContextType = any, ParentType extends ResolversParentTypes['Search'] = ResolversParentTypes['Search']> = ResolversObject<{
+  clubs?: Resolver<Array<Maybe<ResolversTypes['Club']>>, ParentType, ContextType>;
+  nations?: Resolver<Array<Maybe<ResolversTypes['Nation']>>, ParentType, ContextType>;
+  players?: Resolver<Array<Maybe<ResolversTypes['Player']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -318,6 +341,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Nation?: NationResolvers<ContextType>;
   Player?: PlayerResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Search?: SearchResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 }>;
 
