@@ -12,10 +12,8 @@ export const nation: ClubResolvers['nation'] = async (parent) => {
   return result;
 };
 
-export const players: ClubResolvers['players'] = async (parent) => {
-  return await queryDatabase({
-    key: 'club-players-query',
-    text: 'SELECT * FROM players WHERE club_id = $1',
-    values: [parent.id],
-  });
-};
+export const players: ClubResolvers['players'] = async (parent) => await queryDatabase({
+  key: 'club-players-query',
+  text: 'SELECT * FROM players WHERE club_id = $1',
+  values: [parent.id],
+});
