@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -14,6 +14,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  Upload: { input: any; output: any; }
 };
 
 export type AuthPayload = {
@@ -33,24 +34,32 @@ export type Club = {
 };
 
 export type CreateClubInput = {
-  logo?: InputMaybe<Scalars['String']['input']>;
+  logo?: InputMaybe<Scalars['Upload']['input']>;
   name: Scalars['String']['input'];
   nation_id: Scalars['Int']['input'];
 };
 
 export type CreateNationInput = {
-  flag?: InputMaybe<Scalars['String']['input']>;
+  flag?: InputMaybe<Scalars['Upload']['input']>;
   name: Scalars['String']['input'];
   population: Scalars['Int']['input'];
 };
 
 export type CreatePlayerInput = {
-  avatar?: InputMaybe<Scalars['String']['input']>;
+  avatar?: InputMaybe<Scalars['Upload']['input']>;
   birthdate: Scalars['String']['input'];
   club_id?: InputMaybe<Scalars['Int']['input']>;
   name: Scalars['String']['input'];
   nationality_ids: Array<InputMaybe<Scalars['Int']['input']>>;
   position: Scalars['String']['input'];
+};
+
+export type File = {
+  __typename?: 'File';
+  filename: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  mimetype: Scalars['String']['output'];
+  path: Scalars['String']['output'];
 };
 
 export type LoginInput = {
@@ -135,7 +144,7 @@ export type Search = {
 };
 
 export type SignupInput = {
-  avatar?: InputMaybe<Scalars['String']['input']>;
+  avatar?: InputMaybe<Scalars['Upload']['input']>;
   email: Scalars['String']['input'];
   first_name: Scalars['String']['input'];
   last_name: Scalars['String']['input'];
@@ -230,6 +239,7 @@ export type ResolversTypes = ResolversObject<{
   CreateClubInput: CreateClubInput;
   CreateNationInput: CreateNationInput;
   CreatePlayerInput: CreatePlayerInput;
+  File: ResolverTypeWrapper<File>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   LoginInput: LoginInput;
@@ -240,6 +250,7 @@ export type ResolversTypes = ResolversObject<{
   Search: ResolverTypeWrapper<Search>;
   SignupInput: SignupInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Upload: ResolverTypeWrapper<Scalars['Upload']['output']>;
   User: ResolverTypeWrapper<User>;
 }>;
 
@@ -251,6 +262,7 @@ export type ResolversParentTypes = ResolversObject<{
   CreateClubInput: CreateClubInput;
   CreateNationInput: CreateNationInput;
   CreatePlayerInput: CreatePlayerInput;
+  File: File;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   LoginInput: LoginInput;
@@ -261,6 +273,7 @@ export type ResolversParentTypes = ResolversObject<{
   Search: Search;
   SignupInput: SignupInput;
   String: Scalars['String']['output'];
+  Upload: Scalars['Upload']['output'];
   User: User;
 }>;
 
@@ -277,6 +290,14 @@ export type ClubResolvers<ContextType = any, ParentType extends ResolversParentT
   nation?: Resolver<ResolversTypes['Nation'], ParentType, ContextType>;
   nation_id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   players?: Resolver<Array<Maybe<ResolversTypes['Player']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type FileResolvers<ContextType = any, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = ResolversObject<{
+  filename?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  mimetype?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  path?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -324,6 +345,10 @@ export type SearchResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
+  name: 'Upload';
+}
+
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -337,11 +362,13 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 export type Resolvers<ContextType = any> = ResolversObject<{
   AuthPayload?: AuthPayloadResolvers<ContextType>;
   Club?: ClubResolvers<ContextType>;
+  File?: FileResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Nation?: NationResolvers<ContextType>;
   Player?: PlayerResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Search?: SearchResolvers<ContextType>;
+  Upload?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
 }>;
 

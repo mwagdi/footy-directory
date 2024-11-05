@@ -17,6 +17,7 @@ const server = new ApolloServer<Context>({
   typeDefs,
   resolvers,
   introspection: true,
+  csrfPrevention: true,
 });
 
 (async () => {

@@ -20,6 +20,7 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "graphql": "^16.9.0",
+    "graphql-upload": "^17.0.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.0"
   },
@@ -29,6 +30,7 @@
     "@graphql-codegen/typescript": "^4.1.0",
     "@graphql-codegen/typescript-resolvers": "^4.3.0",
     "@types/bcryptjs": "^2.4.6",
+    "@types/graphql-upload": "^16.0.7",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.7.5",
     "@types/pg": "^8.11.10",

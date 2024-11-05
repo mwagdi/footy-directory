@@ -4,8 +4,10 @@ import * as Club from './club';
 import * as Player from './player';
 import * as Mutation from './mutation';
 import { Resolvers } from '../__generated__/schema-types';
+import GraphQLUpload from 'graphql-upload/GraphQLUpload.mjs';
 
 export const resolvers: Resolvers = {
+  Upload: GraphQLUpload,
   Query,
   Nation,
   Club,

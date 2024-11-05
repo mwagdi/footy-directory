@@ -3,6 +3,7 @@ import { compare, hash } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { queryDatabase } from '../database/query';
 import { Context } from '../types';
+import * as fs from 'fs';
 
 export const signup: MutationResolvers['signup'] = async (_, { input }) => {
   const { password: plainTextPassword, email, first_name, last_name, avatar } = input;
@@ -73,14 +74,24 @@ export const createNation: MutationResolvers<Context>['createNation'] = async (_
 
 export const createClub: MutationResolvers<Context>['createClub'] = async (_, { input }, { userId }) => {
   const { name, nation_id, logo } = input;
+  const { createReadStream, filename, mimetype } = await logo;
 
   try {
     if (!userId) throw new Error('Not authenticated');
 
+    const stream = createReadStream();
+    const path = `uploads/${filename}`;
+    await new Promise((resolve, reject) => {
+      const writeStream = fs.createWriteStream(path);
+      stream.pipe(writeStream);
+      writeStream.on('finish', resolve);
+      writeStream.on('error', reject);
+    });
+
     const [club] = await queryDatabase({
       key: 'create-club-query',
       text: 'INSERT INTO clubs (name, nation_id, logo) VALUES ($1, $2, $3) RETURNING *',
-      values: [name, nation_id, logo],
+      values: [name, nation_id, path],
     });
 
     return club;

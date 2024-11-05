@@ -1,3 +1,12 @@
+scalar Upload
+
+type File {
+    id: ID!
+    filename: String!
+    mimetype: String!
+    path: String!
+}
+
 type Nation {
     id: ID!
     name: String!
@@ -67,7 +76,7 @@ input SignupInput {
     password: String!
     first_name: String!
     last_name: String!
-    avatar: String
+    avatar: Upload
 }
 
 input LoginInput {
@@ -78,13 +87,13 @@ input LoginInput {
 input CreateNationInput {
     name: String!
     population: Int!
-    flag: String
+    flag: Upload
 }
 
 input CreateClubInput {
     name: String!
     nation_id: Int!
-    logo: String
+    logo: Upload
 }
 
 input CreatePlayerInput {
@@ -93,5 +102,5 @@ input CreatePlayerInput {
     position: String!
     club_id: Int
     nationality_ids: [Int]!
-    avatar: String
+    avatar: Upload
 }
