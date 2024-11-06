@@ -36,7 +36,7 @@ const server = new ApolloServer<Context>({
 
     app.use(
       '/',
-      cors<cors.CorsRequest>(),
+      cors<cors.CorsRequest>({ origin: ['http://localhost:3000/', 'https://studio.apollographql.com'] }),
       express.json(),
       expressMiddleware(server, {
         context: async ({ req }) => {
