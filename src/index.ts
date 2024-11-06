@@ -10,6 +10,7 @@ import { createTables } from './database/tables';
 import { decodeAuthHeader } from './utils';
 import { Context } from './types';
 import { expressMiddleware } from '@apollo/server/express4';
+import multer from 'multer';
 
 dotenv.config();
 
@@ -51,6 +52,9 @@ const server = new ApolloServer<Context>({
         },
       }),
     );
+
+    const upload = multer({ dest: 'uploads/' });
+    app.use(upload.single('file'));
 
     await new Promise<void>((resolve) =>
       httpServer.listen({ port: process.env.PORT as unknown as number || 4000 }, resolve),
