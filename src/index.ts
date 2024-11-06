@@ -53,7 +53,7 @@ const server = new ApolloServer<Context>({
     );
 
     await new Promise<void>((resolve) =>
-      httpServer.listen({ port: 4000 }, resolve),
+      httpServer.listen({ port: process.env.PORT as unknown as number || 4000 }, resolve),
     );
     console.log('🚀 Server ready at http://localhost:4000/');
   } catch (error) {
