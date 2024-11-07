@@ -74,19 +74,23 @@ export const createNation: MutationResolvers<Context>['createNation'] = async (_
 
 export const createClub: MutationResolvers<Context>['createClub'] = async (_, { input }, { userId }) => {
   const { name, nation_id, logo } = input;
-  const { createReadStream, filename } = await logo;
 
   try {
     if (!userId) throw new Error('Not authenticated');
 
-    const stream = createReadStream();
-    const path = `uploads/${filename}`;
-    await new Promise((resolve, reject) => {
-      const writeStream = fs.createWriteStream(path);
-      stream.pipe(writeStream);
-      writeStream.on('finish', resolve);
-      writeStream.on('error', reject);
-    });
+    let path: string | null = null;
+
+    if (logo) {
+      const { createReadStream, filename } = await logo;
+      const stream = createReadStream();
+      path = `uploads/${filename}`;
+      await new Promise((resolve, reject) => {
+        const writeStream = fs.createWriteStream(path);
+        stream.pipe(writeStream);
+        writeStream.on('finish', resolve);
+        writeStream.on('error', reject);
+      });
+    }
 
     const [club] = await queryDatabase({
       key: 'create-club-query',
