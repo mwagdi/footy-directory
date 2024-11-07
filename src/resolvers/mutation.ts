@@ -74,6 +74,7 @@ export const createNation: MutationResolvers<Context>['createNation'] = async (_
 
 export const createClub: MutationResolvers<Context>['createClub'] = async (_, { input }, { userId }) => {
   const { name, nation_id, logo } = input;
+  console.log('LOGO', logo);
 
   try {
     if (!userId) throw new Error('Not authenticated');
