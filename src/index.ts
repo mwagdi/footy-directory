@@ -30,7 +30,6 @@ const server = new ApolloServer<Context>({
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-
 (async () => {
   try {
     await server.start();
@@ -67,3 +66,7 @@ const server = new ApolloServer<Context>({
     console.error('Error starting server:', error);
   }
 })();
+
+httpServer.on('error', (err) => {
+  console.error('HTTP Server Error:', err);
+});
