@@ -12,6 +12,7 @@ import { Context } from './types';
 import { expressMiddleware } from '@apollo/server/express4';
 import multer from 'multer';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
+import path from 'path';
 
 dotenv.config();
 
@@ -58,8 +59,19 @@ const server = new ApolloServer<Context>({
       }),
     );
 
-    const upload = multer({ dest: 'uploads/' });
+    const storage = multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, 'uploads'));
+      },
+      filename: (req, file, cb) => {
+        cb(null, file.originalname);
+      },
+    });
+
+    const upload = multer({ storage });
     app.use(upload.single('file'));
+
+    app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
     await new Promise<void>((resolve) =>
       httpServer.listen({ port: process.env.PORT as unknown as number || 4000 }, resolve),
