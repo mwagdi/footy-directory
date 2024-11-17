@@ -11,6 +11,7 @@ import { decodeAuthHeader } from './utils';
 import { Context } from './types';
 import { expressMiddleware } from '@apollo/server/express4';
 import multer from 'multer';
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
 dotenv.config();
 
@@ -21,6 +22,8 @@ createTables();
 const app = express();
 
 const httpServer = http.createServer(app);
+
+app.use(graphqlUploadExpress());
 
 const server = new ApolloServer<Context>({
   typeDefs,
