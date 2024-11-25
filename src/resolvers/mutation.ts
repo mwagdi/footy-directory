@@ -93,7 +93,7 @@ export const createClub: MutationResolvers<Context>['createClub'] = async (_, { 
 
       const uploadParams = {
         Bucket: process.env.S3_BUCKET_NAME!,
-        Key: uniqueFilename,
+        Key: `uploads/${uniqueFilename}`,
         Body: createReadStream(),
         ContentType: mimetype,
       };
