@@ -10,9 +10,7 @@ import { createTables } from './database/tables';
 import { decodeAuthHeader } from './utils';
 import { Context } from './types';
 import { expressMiddleware } from '@apollo/server/express4';
-import multer from 'multer';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
-import path from 'path';
 
 dotenv.config();
 
@@ -21,10 +19,9 @@ const typeDefs = readFileSync('schema.graphql', 'utf8');
 createTables();
 
 const app = express();
-
 const httpServer = http.createServer(app);
 
-app.use(graphqlUploadExpress());
+app.use(graphqlUploadExpress()); // Add this for file upload support
 
 const server = new ApolloServer<Context>({
   typeDefs,
@@ -59,22 +56,8 @@ const server = new ApolloServer<Context>({
       }),
     );
 
-    const storage = multer.diskStorage({
-      destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, 'uploads'));
-      },
-      filename: (req, file, cb) => {
-        cb(null, file.originalname);
-      },
-    });
-
-    const upload = multer({ storage });
-    app.use(upload.single('file'));
-
-    app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
     await new Promise<void>((resolve) =>
-      httpServer.listen({ port: process.env.PORT as unknown as number || 4000 }, resolve),
+      httpServer.listen({ port: process.env.PORT || 4000 }, resolve),
     );
     console.log('🚀 Server ready at http://localhost:4000/');
   } catch (error) {
