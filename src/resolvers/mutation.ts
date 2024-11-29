@@ -3,13 +3,7 @@ import { compare, hash } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { queryDatabase } from '../database/query';
 import { Context } from '../types';
-import { S3 } from 'aws-sdk';
-
-const s3 = new S3({
-  region: process.env.AWS_REGION,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
+import { uploadToS3 } from '../utils';
 
 export const signup: MutationResolvers['signup'] = async (_, { input }) => {
   const { password: plainTextPassword, email, first_name, last_name, avatar } = input;
@@ -84,21 +78,7 @@ export const createClub: MutationResolvers<Context>['createClub'] = async (_, { 
   try {
     if (!userId) throw new Error('Not authenticated');
 
-    let path: string | null = null;
-
-    if (logo) {
-      const { createReadStream, filename, mimetype } = await logo;
-      const uniqueFilename = `${new Date().toISOString()}-${filename}`;
-
-      const uploadParams = {
-        Bucket: process.env.S3_BUCKET_NAME!,
-        Key: `uploads/${uniqueFilename}`,
-        Body: createReadStream(),
-        ContentType: mimetype,
-      };
-      const { Location } = await s3.upload(uploadParams).promise();
-      path = Location;
-    }
+    const path = await uploadToS3(logo);
 
     const [club] = await queryDatabase({
       key: 'create-club-query',
