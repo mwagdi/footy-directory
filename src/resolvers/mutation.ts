@@ -3,7 +3,6 @@ import { compare, hash } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { queryDatabase } from '../database/query';
 import { Context } from '../types';
-import * as fs from 'fs';
 import { S3 } from 'aws-sdk';
 
 const s3 = new S3({
