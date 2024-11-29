@@ -10,10 +10,12 @@ export const signup: MutationResolvers['signup'] = async (_, { input }) => {
   const password = await hash(plainTextPassword, 10);
 
   try {
+    const path = await uploadToS3(avatar);
+
     const [user] = await queryDatabase({
       key: 'create-user-query',
       text: 'INSERT INTO users (email, password, first_name, last_name, avatar) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      values: [email, password, first_name, last_name, avatar],
+      values: [email, password, first_name, last_name, path],
     });
 
     const token = sign({ userId: user.id }, process.env.APP_SECRET as string);
@@ -59,10 +61,12 @@ export const createNation: MutationResolvers<Context>['createNation'] = async (_
   try {
     if (!userId) throw new Error('Not authenticated');
 
+    const path = await uploadToS3(flag);
+
     const [nation] = await queryDatabase({
       key: 'create-nation-query',
       text: 'INSERT INTO nations (name, population, flag) VALUES ($1, $2, $3) RETURNING *',
-      values: [name, population, flag],
+      values: [name, population, path],
     });
 
     return nation;
@@ -99,10 +103,12 @@ export const createPlayer: MutationResolvers<Context>['createPlayer'] = async (_
   try {
     if (!userId) throw new Error('Not authenticated');
 
+    const path = await uploadToS3(avatar);
+
     const [player] = await queryDatabase({
       key: 'create-player-query',
       text: 'INSERT INTO players (name, club_id, avatar, birthdate) VALUES ($1, $2, $3, $4) RETURNING *',
-      values: [name, club_id, avatar, birthdate],
+      values: [name, club_id, path, birthdate],
     });
 
     const nationalityIdValues = nationality_ids.map((_, index) => `($1, $${index + 2})`).join(', ');
