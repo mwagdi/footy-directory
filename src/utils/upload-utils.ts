@@ -27,3 +27,18 @@ export const uploadToS3 = async (file: InputMaybe<Scalars['Upload']['input']>) =
     throw new Error(error);
   }
 };
+
+export const deleteFromS3 = async (fileName: string) => {
+  const params = {
+    Bucket: process.env.S3_BUCKET_NAME!,
+    Key: fileName,
+  };
+
+  try {
+    const data = await s3.deleteObject(params).promise();
+    console.log(`File deleted successfully: ${fileName}`);
+    console.log('Response:', data);
+  } catch (error) {
+    console.error('Error deleting file:', error.message);
+  }
+};
