@@ -117,6 +117,24 @@ export const createClub: MutationResolvers<Context>['createClub'] = async (_, { 
   }
 };
 
+export const updateClub: MutationResolvers<Context>['updateClub'] = async (_, { input }, { userId }) => {
+  const { id, ...updates } = input;
+
+  try {
+    if (!userId) throw new Error('Not authenticated');
+
+    if (updates.logo) {
+      const path = await uploadToS3(updates.logo);
+      updates.logo = path;
+    }
+
+    return await patchUpdate('clubs', id, updates, 'update-club-query');
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to update club');
+  }
+};
+
 export const createPlayer: MutationResolvers<Context>['createPlayer'] = async (_, { input }, { userId }) => {
   const { name, club_id, avatar, birthdate, nationality_ids } = input;
 
