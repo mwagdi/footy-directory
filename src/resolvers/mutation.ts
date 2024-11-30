@@ -149,22 +149,7 @@ export const createPlayer: MutationResolvers<Context>['createPlayer'] = async (_
       values: [name, club_id, path, birthdate],
     });
 
-    const nationalityIdValues = nationality_ids.map((_, index) => `($1, $${index + 2})`).join(', ');
-
-    await queryDatabase({
-      key: 'create-player-nation-query',
-      text: `INSERT INTO player_nations (player_id, nation_id)
-             VALUES ${nationalityIdValues}`,
-      values: [player.id, ...nationality_ids],
-    });
-
-    const nationalities = await queryDatabase({
-      key: 'player-nationalities-query',
-      text: `SELECT *
-             FROM nations
-             WHERE ${nationality_ids.map(id => `id = $${id}`).join(' OR ')}`,
-      values: [player.id],
-    });
+    const nationalities = await linkNationToPlayer(player.id, nationality_ids);
 
     return { ...player, nationalities };
   } catch (error) {
