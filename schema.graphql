@@ -67,6 +67,7 @@ type Mutation {
     signup(input: SignupInput!): AuthPayload
     login(input: LoginInput!): AuthPayload
     createNation(input: CreateNationInput!): Nation
+    updateNation(input: UpdateNationInput!): Nation
     createClub(input: CreateClubInput!): Club
     createPlayer(input: CreatePlayerInput): Player
 }
@@ -87,6 +88,13 @@ input LoginInput {
 input CreateNationInput {
     name: String!
     population: Int!
+    flag: Upload
+}
+
+input UpdateNationInput {
+    id: Int!
+    name: String
+    population: Int
     flag: Upload
 }
 

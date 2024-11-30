@@ -74,6 +74,7 @@ export type Mutation = {
   createPlayer?: Maybe<Player>;
   login?: Maybe<AuthPayload>;
   signup?: Maybe<AuthPayload>;
+  updateNation?: Maybe<Nation>;
 };
 
 
@@ -99,6 +100,11 @@ export type MutationLoginArgs = {
 
 export type MutationSignupArgs = {
   input: SignupInput;
+};
+
+
+export type MutationUpdateNationArgs = {
+  input: UpdateNationInput;
 };
 
 export type Nation = {
@@ -149,6 +155,13 @@ export type SignupInput = {
   first_name: Scalars['String']['input'];
   last_name: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type UpdateNationInput = {
+  flag?: InputMaybe<Scalars['Upload']['input']>;
+  id: Scalars['Int']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  population?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type User = {
@@ -250,6 +263,7 @@ export type ResolversTypes = ResolversObject<{
   Search: ResolverTypeWrapper<Search>;
   SignupInput: SignupInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  UpdateNationInput: UpdateNationInput;
   Upload: ResolverTypeWrapper<Scalars['Upload']['output']>;
   User: ResolverTypeWrapper<User>;
 }>;
@@ -273,6 +287,7 @@ export type ResolversParentTypes = ResolversObject<{
   Search: Search;
   SignupInput: SignupInput;
   String: Scalars['String']['output'];
+  UpdateNationInput: UpdateNationInput;
   Upload: Scalars['Upload']['output'];
   User: User;
 }>;
@@ -307,6 +322,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createPlayer?: Resolver<Maybe<ResolversTypes['Player']>, ParentType, ContextType, Partial<MutationCreatePlayerArgs>>;
   login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
   signup?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationSignupArgs, 'input'>>;
+  updateNation?: Resolver<Maybe<ResolversTypes['Nation']>, ParentType, ContextType, RequireFields<MutationUpdateNationArgs, 'input'>>;
 }>;
 
 export type NationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Nation'] = ResolversParentTypes['Nation']> = ResolversObject<{
