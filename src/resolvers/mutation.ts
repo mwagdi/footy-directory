@@ -4,7 +4,7 @@ import { sign } from 'jsonwebtoken';
 import { queryDatabase } from '../database/query';
 import { Context } from '../types';
 import { uploadToS3 } from '../utils';
-import { patchUpdate } from '../utils/query-utils';
+import { linkNationToPlayer, patchUpdate } from '../utils/query-utils';
 
 export const signup: MutationResolvers['signup'] = async (_, { input }) => {
   const { password: plainTextPassword, email, first_name, last_name, avatar } = input;
@@ -155,5 +155,37 @@ export const createPlayer: MutationResolvers<Context>['createPlayer'] = async (_
   } catch (error) {
     console.error(error);
     throw new Error('Failed to create player');
+  }
+};
+
+export const updatePlayer: MutationResolvers<Context>['updatePlayer'] = async (_, { input }, { userId }) => {
+  const { id, nationality_ids, ...updates } = input;
+
+  try {
+    if (!userId) throw new Error('Not authenticated');
+
+    if (updates.avatar) {
+      const path = await uploadToS3(updates.avatar);
+      updates.avatar = path;
+    }
+
+    const player = await patchUpdate('players', id, updates, 'update-player-query');
+
+    if (nationality_ids) {
+      await queryDatabase({
+        key: 'delete-player-nations-query',
+        text: 'DELETE FROM player_nations WHERE player_id = $1',
+        values: [id],
+      });
+
+      const nationalities = await linkNationToPlayer(id, nationality_ids);
+
+      return { ...player, nationalities };
+    }
+
+
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to update player');
   }
 };
