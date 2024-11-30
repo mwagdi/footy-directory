@@ -15,3 +15,24 @@ export const patchUpdate = async <T>(tableName: string, id: number, updates: T, 
 
   return result;
 };
+
+export const linkNationToPlayer = async (playerId: number, nationIds: number[]) => {
+  const nationalityIdValues = nationIds.map((_, index) => `($1, $${index + 2})`).join(', ');
+
+  await queryDatabase({
+    key: 'create-player-nation-query',
+    text: `INSERT INTO player_nations (player_id, nation_id)
+           VALUES ${nationalityIdValues}`,
+    values: [playerId, ...nationIds],
+  });
+
+  const nationalities = await queryDatabase({
+    key: 'player-nationalities-query',
+    text: `SELECT *
+           FROM nations
+           WHERE ${nationIds.map(id => `id = $${id}`).join(' OR ')}`,
+    values: [playerId],
+  });
+
+  return nationalities;
+};
