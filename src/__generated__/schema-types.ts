@@ -74,6 +74,7 @@ export type Mutation = {
   createPlayer?: Maybe<Player>;
   login?: Maybe<AuthPayload>;
   signup?: Maybe<AuthPayload>;
+  updateClub?: Maybe<Club>;
   updateNation?: Maybe<Nation>;
 };
 
@@ -100,6 +101,11 @@ export type MutationLoginArgs = {
 
 export type MutationSignupArgs = {
   input: SignupInput;
+};
+
+
+export type MutationUpdateClubArgs = {
+  input: UpdateClubInput;
 };
 
 
@@ -155,6 +161,13 @@ export type SignupInput = {
   first_name: Scalars['String']['input'];
   last_name: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type UpdateClubInput = {
+  id: Scalars['Int']['input'];
+  logo?: InputMaybe<Scalars['Upload']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  nation_id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateNationInput = {
@@ -263,6 +276,7 @@ export type ResolversTypes = ResolversObject<{
   Search: ResolverTypeWrapper<Search>;
   SignupInput: SignupInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  UpdateClubInput: UpdateClubInput;
   UpdateNationInput: UpdateNationInput;
   Upload: ResolverTypeWrapper<Scalars['Upload']['output']>;
   User: ResolverTypeWrapper<User>;
@@ -287,6 +301,7 @@ export type ResolversParentTypes = ResolversObject<{
   Search: Search;
   SignupInput: SignupInput;
   String: Scalars['String']['output'];
+  UpdateClubInput: UpdateClubInput;
   UpdateNationInput: UpdateNationInput;
   Upload: Scalars['Upload']['output'];
   User: User;
@@ -322,6 +337,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createPlayer?: Resolver<Maybe<ResolversTypes['Player']>, ParentType, ContextType, Partial<MutationCreatePlayerArgs>>;
   login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
   signup?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationSignupArgs, 'input'>>;
+  updateClub?: Resolver<Maybe<ResolversTypes['Club']>, ParentType, ContextType, RequireFields<MutationUpdateClubArgs, 'input'>>;
   updateNation?: Resolver<Maybe<ResolversTypes['Nation']>, ParentType, ContextType, RequireFields<MutationUpdateNationArgs, 'input'>>;
 }>;
 
