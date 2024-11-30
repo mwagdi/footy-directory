@@ -70,7 +70,8 @@ type Mutation {
     updateNation(input: UpdateNationInput!): Nation
     createClub(input: CreateClubInput!): Club
     updateClub(input: UpdateClubInput!): Club
-    createPlayer(input: CreatePlayerInput): Player
+    createPlayer(input: CreatePlayerInput!): Player
+    updatePlayer(input: UpdatePlayerInput!): Player
 }
 
 input SignupInput {
@@ -118,5 +119,15 @@ input CreatePlayerInput {
     position: String!
     club_id: Int
     nationality_ids: [Int]!
+    avatar: Upload
+}
+
+input UpdatePlayerInput {
+    id: Int!
+    name: String
+    birthdate: String
+    position: String
+    club_id: Int
+    nationality_ids: [Int]
     avatar: Upload
 }

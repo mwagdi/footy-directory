@@ -76,6 +76,7 @@ export type Mutation = {
   signup?: Maybe<AuthPayload>;
   updateClub?: Maybe<Club>;
   updateNation?: Maybe<Nation>;
+  updatePlayer?: Maybe<Player>;
 };
 
 
@@ -90,7 +91,7 @@ export type MutationCreateNationArgs = {
 
 
 export type MutationCreatePlayerArgs = {
-  input?: InputMaybe<CreatePlayerInput>;
+  input: CreatePlayerInput;
 };
 
 
@@ -111,6 +112,11 @@ export type MutationUpdateClubArgs = {
 
 export type MutationUpdateNationArgs = {
   input: UpdateNationInput;
+};
+
+
+export type MutationUpdatePlayerArgs = {
+  input: UpdatePlayerInput;
 };
 
 export type Nation = {
@@ -175,6 +181,16 @@ export type UpdateNationInput = {
   id: Scalars['Int']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   population?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdatePlayerInput = {
+  avatar?: InputMaybe<Scalars['Upload']['input']>;
+  birthdate?: InputMaybe<Scalars['String']['input']>;
+  club_id?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars['Int']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  nationality_ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  position?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -278,6 +294,7 @@ export type ResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   UpdateClubInput: UpdateClubInput;
   UpdateNationInput: UpdateNationInput;
+  UpdatePlayerInput: UpdatePlayerInput;
   Upload: ResolverTypeWrapper<Scalars['Upload']['output']>;
   User: ResolverTypeWrapper<User>;
 }>;
@@ -303,6 +320,7 @@ export type ResolversParentTypes = ResolversObject<{
   String: Scalars['String']['output'];
   UpdateClubInput: UpdateClubInput;
   UpdateNationInput: UpdateNationInput;
+  UpdatePlayerInput: UpdatePlayerInput;
   Upload: Scalars['Upload']['output'];
   User: User;
 }>;
@@ -334,11 +352,12 @@ export type FileResolvers<ContextType = any, ParentType extends ResolversParentT
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createClub?: Resolver<Maybe<ResolversTypes['Club']>, ParentType, ContextType, RequireFields<MutationCreateClubArgs, 'input'>>;
   createNation?: Resolver<Maybe<ResolversTypes['Nation']>, ParentType, ContextType, RequireFields<MutationCreateNationArgs, 'input'>>;
-  createPlayer?: Resolver<Maybe<ResolversTypes['Player']>, ParentType, ContextType, Partial<MutationCreatePlayerArgs>>;
+  createPlayer?: Resolver<Maybe<ResolversTypes['Player']>, ParentType, ContextType, RequireFields<MutationCreatePlayerArgs, 'input'>>;
   login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
   signup?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationSignupArgs, 'input'>>;
   updateClub?: Resolver<Maybe<ResolversTypes['Club']>, ParentType, ContextType, RequireFields<MutationUpdateClubArgs, 'input'>>;
   updateNation?: Resolver<Maybe<ResolversTypes['Nation']>, ParentType, ContextType, RequireFields<MutationUpdateNationArgs, 'input'>>;
+  updatePlayer?: Resolver<Maybe<ResolversTypes['Player']>, ParentType, ContextType, RequireFields<MutationUpdatePlayerArgs, 'input'>>;
 }>;
 
 export type NationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Nation'] = ResolversParentTypes['Nation']> = ResolversObject<{
