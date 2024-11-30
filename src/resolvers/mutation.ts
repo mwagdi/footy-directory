@@ -4,6 +4,7 @@ import { sign } from 'jsonwebtoken';
 import { queryDatabase } from '../database/query';
 import { Context } from '../types';
 import { uploadToS3 } from '../utils';
+import { patchUpdate } from '../utils/query-utils';
 
 export const signup: MutationResolvers['signup'] = async (_, { input }) => {
   const { password: plainTextPassword, email, first_name, last_name, avatar } = input;
@@ -73,6 +74,25 @@ export const createNation: MutationResolvers<Context>['createNation'] = async (_
   } catch (error) {
     console.error(error);
     throw new Error('Failed to create nation');
+  }
+};
+
+export const updateNation: MutationResolvers<Context>['updateNation'] = async (_, { input }, { userId }) => {
+  const { id, ...updates } = input;
+
+  try {
+    if (!userId) throw new Error('Not authenticated');
+
+
+    if (updates.flag) {
+      const path = await uploadToS3(updates.flag);
+      updates.flag = path;
+    }
+
+    return await patchUpdate('nations', id, updates, 'update-nation-query');
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to update nation');
   }
 };
 
